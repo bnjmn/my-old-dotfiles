@@ -1,0 +1,237 @@
+" VIMRC -- https://github.com/bnjmn/dotfiles
+" Copyright (c) 2013 Benjamin Petersen
+
+" ---------------------------------------------------------------------------
+" Essentials -- There are certain commands that must be called first
+" ---------------------------------------------------------------------------
+set nocompatible
+
+" Run vundle script by bnjmn
+source $HOME/.vim/vundle.vim
+
+"filetype plugin indent on
+let mapleader = ","
+let maplocalleader = "\\"
+
+" Load Jython (*.jy) as Python filetype
+au BufRead,BufNewFile *.jy set filetype=python
+
+" markdown syntax only works on *.markdown by default
+au BufRead,BufNewFile *.md set filetype=markdown
+
+
+" TESTING GROUND ----------------------
+
+" Temp, split parens and such on return
+"inoremap {<cr> {<cr>}<c-o>O<tab>
+"inoremap [<cr> [<cr>]<c-o>O<tab>
+"inoremap (<cr> (<cr>)<c-o>O<tab>
+
+"nnoremap <C-]> gt
+"nnoremap <C-[> gT
+
+" Indent Guide
+let g:indent_guides_start_level = 2
+let g:indent_guides_guide_size = 1
+
+" Folding
+set foldmethod=indent
+set foldlevelstart=99
+set foldnestmax=2
+
+" Resize panes more than one line at a time
+"set winheight=30
+"set winminheight=5
+nnoremap <silent> + :exe "resize " . (winheight(0) * 3/2)<CR>
+nnoremap <silent> - :exe "resize " . (winheight(0) * 2/3)<CR>
+
+" ---------------------------------------------------------------------------
+" Environment Settings
+" ---------------------------------------------------------------------------
+
+colorscheme  elflord
+set background=dark
+"highlight ColorColumn ctermbg=darkgrey guibg=darkgrey
+
+set wildmode=longest,list,full
+set wildmenu
+
+syntax on                       " syntax highlighting please
+set number                      " show line numbers
+
+set tabstop=4                   " tabs take four spaces
+set shiftwidth=4                " width of autoindentation in spaces
+set softtabstop=4
+set expandtab                   " convert tabs to spaces
+set backspace=indent,eol,start  " everybody's doing it
+
+set autoindent                  " copy indent from current line
+set smartindent                 " smarter indent, matches brackets and stuff
+
+" Make tabstops and EOLs a little less distracting
+set listchars=tab:▸\ ,eol:¬
+" Shortcut to rapidly toggle `set list`
+nnoremap <leader>l :set list!<CR>
+
+" ---------------------------------------------------------------------------
+" Mappings 
+" ---------------------------------------------------------------------------
+
+" Window Mapping - Make switching windows easier
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+
+" Easier beginning/end of line 
+nnoremap H 0
+nnoremap L $
+
+" open and edit .vimrc  / source .vimrc
+nnoremap <leader>ev :split $MYVIMRC<cr>
+nnoremap <leader>sv :source $MYVIMRC<cr> :echo "vimrc sourced"<cr>
+
+" Omni-complete shortcut
+inoremap <leader>, <C-x><C-o>
+
+" ---------------------------------------------------------------------------
+" Abbreviations
+" ---------------------------------------------------------------------------
+iabbrev respsone response
+iabbrev pyta import pytest<cr>@pytest.mark.a 
+
+
+" Copy to buffer (Ctrl-C)
+vnoremap <C-c> :w! ~/.vimbuffer<CR>
+nnoremap <C-c> :.w! ~/.vimbuffer<CR>
+" Paste from buffer
+noremap <C-p> :r ~/.vimbuffer<CR>
+
+" Line ending issues, convert to correct
+command! FixLineEndings execute "%s///g"
+
+" Toggle paste/nopaste
+nnoremap <leader>p :set paste!<CR> 
+
+" Toggle number/nonumber
+nnoremap <leader>n :set number!<CR> 
+
+" Toggle spell checking
+nnoremap <leader>sp :set spell!<CR> 
+
+" Convert Markdown links to rst
+nnoremap <leader>mtr F[r`f]r f(r<f)r>a`_<esc>
+
+" FormatJSON !!!
+com! FormatJSON %!python -m json.tool
+
+
+" ---------------------------------------------------------------------------
+" Neocomplete suggested settings
+" ---------------------------------------------------------------------------
+
+"Note: This option must set it in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
+" Disable AutoComplPop.
+let g:acp_enableAtStartup = 0
+" Use neocomplete.
+let g:neocomplete#enable_at_startup = 1
+" Use smartcase.
+let g:neocomplete#enable_smart_case = 1
+" Set minimum syntax keyword length.
+let g:neocomplete#sources#syntax#min_keyword_length = 3
+let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
+
+" Define dictionary.
+let g:neocomplete#sources#dictionary#dictionaries = {
+    \ 'default' : '',
+    \ 'vimshell' : $HOME.'/.vimshell_hist',
+    \ 'scheme' : $HOME.'/.gosh_completions'
+        \ }
+
+" Define keyword.
+if !exists('g:neocomplete#keyword_patterns')
+    let g:neocomplete#keyword_patterns = {}
+endif
+let g:neocomplete#keyword_patterns['default'] = '\h\w*'
+
+" Plugin key-mappings.
+inoremap <expr><C-g>     neocomplete#undo_completion()
+inoremap <expr><C-l>     neocomplete#complete_common_string()
+
+" Recommended key-mappings.
+" <CR>: close popup and save indent.
+inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+function! s:my_cr_function()
+  return neocomplete#close_popup() . "\<CR>"
+  " For no inserting <CR> key.
+  "return pumvisible() ? neocomplete#close_popup() : "\<CR>"
+endfunction
+" <TAB>: completion.
+inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+" <C-h>, <BS>: close popup and delete backword char.
+inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
+inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+inoremap <expr><C-y>  neocomplete#close_popup()
+inoremap <expr><C-e>  neocomplete#cancel_popup()
+" Close popup by <Space>.
+"inoremap <expr><Space> pumvisible() ? neocomplete#close_popup() : "\<Space>"
+
+" For cursor moving in insert mode(Not recommended)
+"inoremap <expr><Left>  neocomplete#close_popup() . "\<Left>"
+"inoremap <expr><Right> neocomplete#close_popup() . "\<Right>"
+"inoremap <expr><Up>    neocomplete#close_popup() . "\<Up>"
+"inoremap <expr><Down>  neocomplete#close_popup() . "\<Down>"
+" Or set this.
+"let g:neocomplete#enable_cursor_hold_i = 1
+" Or set this.
+"let g:neocomplete#enable_insert_char_pre = 1
+
+" AutoComplPop like behavior.
+"let g:neocomplete#enable_auto_select = 1
+
+" Shell like behavior(not recommended).
+"set completeopt+=longest
+"let g:neocomplete#enable_auto_select = 1
+"let g:neocomplete#disable_auto_complete = 1
+"inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
+
+" Enable omni completion.
+autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+
+" Enable heavy omni completion.
+if !exists('g:neocomplete#sources#omni#input_patterns')
+  let g:neocomplete#sources#omni#input_patterns = {}
+endif
+"let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
+"let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
+"let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+
+" For perlomni.vim setting.
+" https://github.com/c9s/perlomni.vim
+"let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
+
+
+let g:cssColorVimDoNotMessMyUpdatetime = 1
+
+
+highlight clear SignColumn
+
+
+command! Wq wq
+command! WQ wq
+command! W w
+command! Q q
+
+" Ack!
+nnoremap <leader>a :Ack! 
+nnoremap <leader>A :AckFromSearch<CR>
+
+set hlsearch
+set incsearch
+
+
+command! InsertTime :normal a<c-r>=strftime('%F %H:%M:%S.0 %z')<cr>

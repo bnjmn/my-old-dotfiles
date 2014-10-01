@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+if [[ "$1" == "-h" || "$1" == "--help" ]]; then cat <<HELP
+dotfiles --  Usage: 
+    $(basename "$0") [edit|source]
+HELP
+exit; fi
+
+DOTBIN="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+DOTFILES="$( dirname $DOTBIN )"
+
+# edit dotfiles from anywhere
+if [ "$1" == "edit" ]; then
+    cd $DOTFILES
+    vim +NERDTree
+fi
+
+# Default option
+#   update and
+#   display diff from origin
+if [ ! "$1" ]; then
+    cd $DOTFILES
+    echo "Hello dotfiles"
+    git status --short
+
+    git remote update
+    git log HEAD..origin/master --oneline
+fi
