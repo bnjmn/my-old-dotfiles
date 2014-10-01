@@ -1,12 +1,28 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # ----------------------------------------------------------------------
 #  PATH
 #       See PATH MANIPULATION FUNCTIONS for more
 # ----------------------------------------------------------------------
 
+get_dotfiles_dir () {
+    # http://stackoverflow.com/a/246128
+    local source="${BASH_SOURCE[1]}"
+    while [ -h "$source" ]; do
+      local dir="$( cd -P "$( dirname "$source" )" && pwd )"
+      local source="$(readlink "$source")"
+      [[ $source != /* ]] && source="$dir/$source"
+    done
+    local bash_dir="$( cd -P "$( dirname "$source" )" && pwd )"
+
+    local dotfiles_dir="$( dirname $bash_dir)"
+    echo "$dotfiles_dir"
+}
+
+DOTFILES_DIR=$(get_dotfiles_dir)
+
 PATH=/usr/local/bin:$PATH
-PATH=~/.dotfiles/bin:$PATH
+PATH="$DOTFILES_DIR/bin":$PATH
 
 # heroku toolbelt, stop adding yourself please
 if [ -d /usr/local/heroku/bin ]; then
@@ -62,7 +78,22 @@ export VISUAL="$EDITOR"
 if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
-. ~/.dotfiles/bash/django_bash_completion.sh
+
+. "$DOTFILES_DIR/bash/django_bash_completion.sh"
+
+PIP_REQUIRE_VIRTUALENV=true
+PIP_DOWNLOAD_CACHE=$HOME/.pip/cache
+
+# pip bash completion start
+_pip_completion()
+{
+    COMPREPLY=( $( COMP_WORDS="${COMP_WORDS[*]}" \
+                   COMP_CWORD=$COMP_CWORD \
+                   PIP_AUTO_COMPLETE=1 $1 ) )
+}
+complete -o default -F _pip_completion pip
+# pip bash completion end
+
 
 # ----------------------------------------------------------------------
 #  ALIASES
@@ -209,19 +240,6 @@ export CLICOLOR=1
 export LSCOLORS=ExGxFxDxCxHxHxCbCeEbEb
 export LC_CTYPE=en_US.utf-8
 export LC_ALL=en_US.utf-8
-
-PIP_REQUIRE_VIRTUALENV=true
-PIP_DOWNLOAD_CACHE=$HOME/.pip/cache
-
-# pip bash completion start
-_pip_completion()
-{
-    COMPREPLY=( $( COMP_WORDS="${COMP_WORDS[*]}" \
-                   COMP_CWORD=$COMP_CWORD \
-                   PIP_AUTO_COMPLETE=1 $1 ) )
-}
-complete -o default -F _pip_completion pip
-# pip bash completion end
 
 
 # GRUNT Work
