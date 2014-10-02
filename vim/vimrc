@@ -2,14 +2,48 @@
 " Copyright (c) 2013 Benjamin Petersen
 
 " ---------------------------------------------------------------------------
-" Essentials -- There are certain commands that must be called first
+" Vundle.vim, Vim Bundle plugin manager, https://github.com/gmarik/Vundle.vim
 " ---------------------------------------------------------------------------
-set nocompatible
 
-" Run vundle script by bnjmn
-source $HOME/.vim/vundle.vim
+" Required by Vundle
+" ---------------------------------------------------------------------------
 
-"filetype plugin indent on
+set nocompatible            " be iMproved, required
+filetype off                " required (for vundle)
+
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+" Let Vundle manage Vundle, required
+Plugin 'gmarik/Vundle.vim'
+
+" ---------------------------------------------------------------------------
+" Plugin Bundles - bnjmn
+" ---------------------------------------------------------------------------
+
+" github bundles: user/repo
+Plugin 'scrooloose/nerdtree'
+Plugin 'scrooloose/nerdcommenter'
+Plugin 'tpope/vim-surround'
+Plugin 'tpope/vim-fugitive'
+Plugin 'jmcantrell/vim-virtualenv'
+Plugin 'mileszs/ack.vim'            " depends on system ack
+
+" On trial
+Plugin 'Raimondi/delimitMate'
+Plugin 'AndrewRadev/linediff.vim'
+
+Plugin 'Shougo/neocomplete'         " depends on vim-with-lua
+Plugin 'airblade/vim-gitgutter'
+
+call vundle#end()
+filetype plugin indent on   " required; doubled in .vimrc
+
+" ---------------------------------------------------------------------------
+"
+" ---------------------------------------------------------------------------
+
+
 let mapleader = ","
 let maplocalleader = "\\"
 
@@ -21,18 +55,6 @@ au BufRead,BufNewFile *.md set filetype=markdown
 
 
 " TESTING GROUND ----------------------
-
-" Temp, split parens and such on return
-"inoremap {<cr> {<cr>}<c-o>O<tab>
-"inoremap [<cr> [<cr>]<c-o>O<tab>
-"inoremap (<cr> (<cr>)<c-o>O<tab>
-
-"nnoremap <C-]> gt
-"nnoremap <C-[> gT
-
-" Indent Guide
-let g:indent_guides_start_level = 2
-let g:indent_guides_guide_size = 1
 
 " Folding
 set foldmethod=indent
@@ -83,12 +105,8 @@ nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
-" Easier beginning/end of line 
-nnoremap H 0
-nnoremap L $
-
 " open and edit .vimrc  / source .vimrc
-nnoremap <leader>ev :split $MYVIMRC<cr>
+nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr> :echo "vimrc sourced"<cr>
 
 " Omni-complete shortcut
@@ -122,7 +140,7 @@ nnoremap <leader>sp :set spell!<CR>
 " Convert Markdown links to rst
 nnoremap <leader>mtr F[r`f]r f(r<f)r>a`_<esc>
 
-" FormatJSON !!!
+" FormatJSON
 com! FormatJSON %!python -m json.tool
 
 
@@ -130,15 +148,10 @@ com! FormatJSON %!python -m json.tool
 " Neocomplete suggested settings
 " ---------------------------------------------------------------------------
 
-"Note: This option must set it in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
-" Disable AutoComplPop.
-let g:acp_enableAtStartup = 0
-" Use neocomplete.
-let g:neocomplete#enable_at_startup = 1
-" Use smartcase.
-let g:neocomplete#enable_smart_case = 1
-" Set minimum syntax keyword length.
-let g:neocomplete#sources#syntax#min_keyword_length = 3
+let g:acp_enableAtStartup = 0                           " Disable AutoComplPop.
+let g:neocomplete#enable_at_startup = 1                 " Use neocomplete.
+let g:neocomplete#enable_smart_case = 1                 " Use smartcase.
+let g:neocomplete#sources#syntax#min_keyword_length = 3 " Set minimum syntax keyword length.
 let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
 
 " Define dictionary.
@@ -173,27 +186,6 @@ inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
 inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
 inoremap <expr><C-y>  neocomplete#close_popup()
 inoremap <expr><C-e>  neocomplete#cancel_popup()
-" Close popup by <Space>.
-"inoremap <expr><Space> pumvisible() ? neocomplete#close_popup() : "\<Space>"
-
-" For cursor moving in insert mode(Not recommended)
-"inoremap <expr><Left>  neocomplete#close_popup() . "\<Left>"
-"inoremap <expr><Right> neocomplete#close_popup() . "\<Right>"
-"inoremap <expr><Up>    neocomplete#close_popup() . "\<Up>"
-"inoremap <expr><Down>  neocomplete#close_popup() . "\<Down>"
-" Or set this.
-"let g:neocomplete#enable_cursor_hold_i = 1
-" Or set this.
-"let g:neocomplete#enable_insert_char_pre = 1
-
-" AutoComplPop like behavior.
-"let g:neocomplete#enable_auto_select = 1
-
-" Shell like behavior(not recommended).
-"set completeopt+=longest
-"let g:neocomplete#enable_auto_select = 1
-"let g:neocomplete#disable_auto_complete = 1
-"inoremap <expr><TAB>  pumvisible() ? "\<Down>" : "\<C-x>\<C-u>"
 
 " Enable omni completion.
 autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
@@ -206,21 +198,10 @@ autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 if !exists('g:neocomplete#sources#omni#input_patterns')
   let g:neocomplete#sources#omni#input_patterns = {}
 endif
-"let g:neocomplete#sources#omni#input_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
-"let g:neocomplete#sources#omni#input_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
-"let g:neocomplete#sources#omni#input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
-
-" For perlomni.vim setting.
-" https://github.com/c9s/perlomni.vim
-"let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
-
-
-let g:cssColorVimDoNotMessMyUpdatetime = 1
-
 
 highlight clear SignColumn
 
-
+" Fix quick write/quit
 command! Wq wq
 command! WQ wq
 command! W w
@@ -232,6 +213,5 @@ nnoremap <leader>A :AckFromSearch<CR>
 
 set hlsearch
 set incsearch
-
 
 command! InsertTime :normal a<c-r>=strftime('%F %H:%M:%S.0 %z')<cr>
