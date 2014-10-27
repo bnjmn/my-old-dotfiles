@@ -110,7 +110,10 @@ nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr> :echo "vimrc sourced"<cr>
 
 " Omni-complete shortcut
-inoremap <leader>, <C-x><C-o>
+"inoremap <leader>, <C-x><C-o>
+
+nnoremap <leader>h :nohlsearch<cr>
+
 
 " ---------------------------------------------------------------------------
 " Abbreviations
@@ -118,6 +121,7 @@ inoremap <leader>, <C-x><C-o>
 iabbrev respsone response
 iabbrev pyta import pytest<cr>@pytest.mark.a 
 
+iabbrev pytdb import ipdb; ipdb.set_trace()
 
 " Copy to buffer (Ctrl-C)
 vnoremap <C-c> :w! ~/.vimbuffer<CR>
