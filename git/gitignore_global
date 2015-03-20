@@ -5,3 +5,4 @@ sourceme
 pylint-report.html
 .idea
 .vagrant
+tags

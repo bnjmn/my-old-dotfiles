@@ -227,6 +227,8 @@ prompt_color
 ### Experiments in OSX, or leave
 [[ "$OSTYPE" =~ ^darwin ]] || return 1
 
+alias ls='gls --group-directories-first --color=auto'
+
 ulimit -n 1024
 
 if [ -f `brew --prefix`/etc/bash_completion ]; then
@@ -244,3 +246,12 @@ export LC_ALL=en_US.utf-8
 
 # GRUNT Work
 eval "$(grunt --completion=bash)"
+
+PERL_MB_OPT="--install_base \"$HOME/perl5\""; export PERL_MB_OPT;
+PERL_MM_OPT="INSTALL_BASE=$HOME/perl5"; export PERL_MM_OPT;
+
+# added by travis gem
+[ -f $HOME/.travis/travis.sh ] && source $HOME/.travis/travis.sh
+
+
+eval "$(rbenv init -)"
