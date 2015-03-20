@@ -132,6 +132,10 @@ alias srcbash='. ~/.bashrc && echo "BASHRC sourced"'
 # Remove all symbolic links in current directory
 #alias rmsymlinks='find . -maxdepth 1 -type l -exec rm {} \;'
 
+
+# Recursively rm vim swp files with confirmation
+alias remove-swp-files='find . -name *.swp -exec rm -i '{}' \;'
+
 # --------------------------------------------------------------------
 # PATH MANIPULATION FUNCTIONS - by Ryan Tomayko
 # --------------------------------------------------------------------
@@ -255,3 +259,4 @@ PERL_MM_OPT="INSTALL_BASE=$HOME/perl5"; export PERL_MM_OPT;
 
 
 eval "$(rbenv init -)"
+
