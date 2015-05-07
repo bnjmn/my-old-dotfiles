@@ -136,6 +136,9 @@ alias srcbash='. ~/.bashrc && echo "BASHRC sourced"'
 # Recursively rm vim swp files with confirmation
 alias remove-swp-files='find . -name *.swp -exec rm -i '{}' \;'
 
+# Confirm overwrite when file exists
+alias mv='mv --interactive'
+
 # --------------------------------------------------------------------
 # PATH MANIPULATION FUNCTIONS - by Ryan Tomayko
 # --------------------------------------------------------------------

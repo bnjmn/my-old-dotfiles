@@ -1,0 +1,19 @@
+snippet intest "Integration Test" 
+class Test$1Integration(IntegrationTest):
+    """ $1 """
+
+    def setUpContext(self):
+        self.firm = fixtures.contact()
+    
+    def test_passes(self):
+        
+endsnippet
+
+
+snippet JSONE "New JSONEndpoint"
+JSONEndpoint(
+    input_schema=$1,
+    output_schema=$2,
+    api_function=$3,
+    )
+endsnippet
