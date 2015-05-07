@@ -15,3 +15,10 @@ Install these `dotfiles`:
 
     # Activate
     . ~/.bashrc
+
+
+Installing YCM on Ubuntu/Debian
+
+    sudo apt-get install build-essential cmake python-dev
+    cd ~/.vim/bundle/YouCompleteMe
+    ./install.sh --clang-completer
