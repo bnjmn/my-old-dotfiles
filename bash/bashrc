@@ -231,6 +231,15 @@ prompt_old() {
 test -n "$PS1" &&
 prompt_color
 
+
+export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+
+alias npm-exec='PATH=$(npm bin):$PATH'
+
+
 ### Experiments in OSX, or leave
 [[ "$OSTYPE" =~ ^darwin ]] || return 1
 
@@ -259,9 +268,3 @@ PERL_MM_OPT="INSTALL_BASE=$HOME/perl5"; export PERL_MM_OPT;
 
 # added by travis gem
 [ -f $HOME/.travis/travis.sh ] && source $HOME/.travis/travis.sh
-
-
-eval "$(rbenv init -)"
-
-
-export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
