@@ -137,7 +137,8 @@ alias srcbash='. ~/.bashrc && echo "BASHRC sourced"'
 alias remove-swp-files='find . -name *.swp -exec rm -i '{}' \;'
 
 # Confirm overwrite when file exists
-alias mv='mv --interactive'
+#alias mv='mv --interactive'
+alias mv='mv -i'
 
 # --------------------------------------------------------------------
 # PATH MANIPULATION FUNCTIONS - by Ryan Tomayko
