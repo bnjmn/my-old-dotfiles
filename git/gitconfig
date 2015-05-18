@@ -1,0 +1,53 @@
+[user]
+  name = Benjamin Petersen
+  email = bnjmn@users.noreply.github.com
+
+[alias]
+  st = status
+  ci = commit
+  cia = commit -a --amend
+  au = add -u
+
+  l = log --graph --decorate --pretty=oneline --abbrev-commit -n 22
+  ll = log --pretty=oneline --abbrev-commit --max-count=15
+  lol = log --graph --decorate --pretty=oneline --abbrev-commit
+  lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
+
+  fa = fetch --all
+  co = checkout
+
+  nuke = "!f(){ git branch -D \"$1\" && git push origin :\"$1\"; }; f"
+
+  pull = pull --ff --ff-only
+
+  up = "!git remote update -p; git merge --ff-only @{u}"
+
+[core]
+  excludesfile = ~/.gitignore_global
+
+[color]
+  ui = auto
+
+[color "diff"]
+  meta = blue bold
+  frag = magenta bold
+  old = red bold
+  new = green bold
+
+[color "branch"]
+  current = yellow reverse
+  local = yellow bold
+  remote = green bold
+  plain = red bold
+
+[color "status"]
+  added = yellow bold
+  changed = green bold
+  untracked = blue bold
+
+[push]
+  default = simple
+
+[pull]
+    ; Requires git>=2.0
+	ff = only
